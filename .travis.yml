@@ -1,0 +1,10 @@
+sudo: required # super user premisions
+language: generic
+services:
+  - docker   # we need a copy of docker ready to go
+
+before_install:
+  - docker build -t yosigl/docker-react -f Dockerfile.dev .   # -t > tag with name, -f > specify folder
+
+script:
+  - docker run -e CI=true yosigl/docker-react npm run test -- --coverage

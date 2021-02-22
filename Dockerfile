@@ -1,14 +1,15 @@
 FROM node:alpine as builder     
-# Tagging this as a builder phase (installing dependencies) FOR PRODUCTION WHERE CODE WILL NOT BE CHANGED
+# Tagging this as a builder phase (installing dependencies) FOR PRODUCTION ENVIORMENT
 
 WORKDIR '/app'
+
 
 COPY package.json .
 RUN npm install
 
 COPY . .
 
-CMD ["npm", "run", "build"]
+RUN npm run build
 
 # /app/build <<<<< where the build phase will be stored
 
