@@ -1,0 +1,26 @@
+version: '3'
+# services: Here we will define the services (that take form as containers)
+services:
+  web:
+    build:                    # node app is built in our IDE
+      context: .
+      dockerfile: Dockerfile.dev  
+    environment:
+      - CHOKIDAR_USEPOLLING=true              
+    ports:
+      - "3000:3000"           # - means array.  localmachinePort:portInsideContainer
+    volumes: 
+      - /app/node_modules
+      - .:/app       # current folder outside of the container to the app inside the container
+
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    environment:
+      - CHOKIDAR_USEPOLLING=true 
+    volumes: 
+      - /app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]         # overiding command
+     
