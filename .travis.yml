@@ -3,8 +3,27 @@ language: generic
 services:
   - docker   # we need a copy of docker ready to go
 
+# creating our initial image
 before_install:
   - docker build -t yosigl/docker-react -f Dockerfile.dev .   # -t > tag with name, -f > specify folder
 
+# running the test
 script:
   - docker run -e CI=true yosigl/docker-react npm run test -- --coverage
+
+# Travis CI will take our application and deploy it to AWS
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-2"                # Dockerreact-env.eba-vmapbqid.us-east-2.elasticbeanstalk.com
+  app: "docker-react"                # name of the app
+  env: "Dockerreact-env"
+   # on AWS page, press services and search for S3 and search for our project - press it - copy name
+  bucket_name: "elasticbeanstalk-us-east-2-882509256362"
+  bucket_path: "docker-react"        # same as app name
+  on:
+    branch: master                   # only deploy when pushed to master git (finalized)
+
+access_key_id: $AWS_ACCESS_KEY
+secret_access_key: $AWS_SECRET_KEY
+  
+
