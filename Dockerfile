@@ -11,10 +11,13 @@ COPY . .
 
 RUN npm run build
 
-# /app/build <<<<< where the build phase will be stored
+
+# Second phase (second container)
 
 FROM nginx 
-# Second phase (second container)
+# Elastic beanstalk (AWS) will look at what port is exposed is the port that will get mapped automaticly
+EXPOSE 80
+
 COPY --from=builder /app/build /usr/share/nginx/html
 # Copy from the first container we tagged as builder from app build to nginx/html
 
